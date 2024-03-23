@@ -1,0 +1,7 @@
+{
+	"Server":"localhost",
+	"Port":"8889",
+	"Database":"gofly",
+	"Username":"root",
+	"Password":"123456"
+}
