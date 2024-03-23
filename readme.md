@@ -1,9 +1,10 @@
+# go-customer-service
+基于go-fly的二次开发，目的是学习go相关的技术
+
 ### 郑重提示
 禁止将本项目用于含病毒、木马、色情、赌博、诈骗、违禁用品、假冒产品、虚假信息、数字货币、金融等违法违规业务
 
 当前项目仅供个人学习测试，禁止一切线上商用行为，禁止一切违法使用！！！
-
-
 
 
 ### 项目简介
@@ -42,12 +43,7 @@ go version
 go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.cn,direct
 ```
-* 下载代码
 
-    在任意目录 git clone https://github.com/taoshihan1991/go-fly.git
-    
-    进入go-fly 目录
-   
 * 导入数据库 go run go-fly.go install
 
 * 源码运行 go run go-fly.go server
