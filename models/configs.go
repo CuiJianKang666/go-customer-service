@@ -13,12 +13,12 @@ func UpdateConfig(key string, value string) {
 	c := &Config{
 		ConfValue: value,
 	}
-	DB.Model(c).Where("conf_key = ?", key).Update(c)
+	OldDB.Model(c).Where("conf_key = ?", key).Update(c)
 	InitConfig()
 }
 func FindConfigs() []Config {
 	var config []Config
-	DB.Find(&config)
+	OldDB.Find(&config)
 	return config
 }
 func InitConfig() {

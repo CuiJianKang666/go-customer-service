@@ -32,11 +32,11 @@ func CreateVisitor(name, avator, sourceIp, toId, visitorId, refer, city, clientI
 		Extra:     extra,
 	}
 	v.UpdatedAt = time.Now()
-	DB.Create(v)
+	OldDB.Create(v)
 }
 func FindVisitorByVistorId(visitorId string) Visitor {
 	var v Visitor
-	DB.Where("visitor_id = ?", visitorId).First(&v)
+	OldDB.Where("visitor_id = ?", visitorId).First(&v)
 	return v
 }
 func FindVisitors(page uint, pagesize uint) []Visitor {
@@ -45,7 +45,7 @@ func FindVisitors(page uint, pagesize uint) []Visitor {
 		offset = 0
 	}
 	var visitors []Visitor
-	DB.Offset(offset).Limit(pagesize).Order("status desc, updated_at desc").Find(&visitors)
+	OldDB.Offset(offset).Limit(pagesize).Order("status desc, updated_at desc").Find(&visitors)
 	return visitors
 }
 func FindVisitorsByKefuId(page uint, pagesize uint, kefuId string) []Visitor {
@@ -55,18 +55,18 @@ func FindVisitorsByKefuId(page uint, pagesize uint, kefuId string) []Visitor {
 	}
 	var visitors []Visitor
 	//sql := fmt.Sprintf("select * from visitor where id>=(select id from visitor where  to_id='%s' order by updated_at desc limit %d,1) and to_id='%s' order by updated_at desc limit %d ", kefuId, offset, kefuId, pagesize)
-	//DB.Raw(sql).Scan(&visitors)
-	DB.Where("to_id=?", kefuId).Offset(offset).Limit(pagesize).Order("updated_at desc").Find(&visitors)
+	//OldDB.Raw(sql).Scan(&visitors)
+	OldDB.Where("to_id=?", kefuId).Offset(offset).Limit(pagesize).Order("updated_at desc").Find(&visitors)
 	return visitors
 }
 func FindVisitorsOnline() []Visitor {
 	var visitors []Visitor
-	DB.Where("status = ?", 1).Find(&visitors)
+	OldDB.Where("status = ?", 1).Find(&visitors)
 	return visitors
 }
 func UpdateVisitorStatus(visitorId string, status uint) {
 	visitor := Visitor{}
-	DB.Model(&visitor).Where("visitor_id = ?", visitorId).Update("status", status)
+	OldDB.Model(&visitor).Where("visitor_id = ?", visitorId).Update("status", status)
 }
 func UpdateVisitor(name, avator, visitorId string, status uint, clientIp string, sourceIp string, refer, extra string) {
 	visitor := &Visitor{
@@ -79,24 +79,24 @@ func UpdateVisitor(name, avator, visitorId string, status uint, clientIp string,
 		Avator:   avator,
 	}
 	visitor.UpdatedAt = time.Now()
-	DB.Model(visitor).Where("visitor_id = ?", visitorId).Update(visitor)
+	OldDB.Model(visitor).Where("visitor_id = ?", visitorId).Update(visitor)
 }
 func UpdateVisitorKefu(visitorId string, kefuId string) {
 	visitor := Visitor{}
-	DB.Model(&visitor).Where("visitor_id = ?", visitorId).Update("to_id", kefuId)
+	OldDB.Model(&visitor).Where("visitor_id = ?", visitorId).Update("to_id", kefuId)
 }
 
 // 查询条数
 func CountVisitors() uint {
 	var count uint
-	DB.Model(&Visitor{}).Count(&count)
+	OldDB.Model(&Visitor{}).Count(&count)
 	return count
 }
 
 // 查询条数
 func CountVisitorsByKefuId(kefuId string) uint {
 	var count uint
-	DB.Model(&Visitor{}).Where("to_id=?", kefuId).Count(&count)
+	OldDB.Model(&Visitor{}).Where("to_id=?", kefuId).Count(&count)
 	return count
 }
 
@@ -108,7 +108,7 @@ type EveryDayNum struct {
 
 func CountVisitorsEveryDay(toId string) []EveryDayNum {
 	var results []EveryDayNum
-	DB.Raw("select DATE_FORMAT(created_at,'%y-%m-%d') as day ,"+
+	OldDB.Raw("select DATE_FORMAT(created_at,'%y-%m-%d') as day ,"+
 		"count(*) as num from visitor where to_id=? group by day order by day desc limit 30",
 		toId).Scan(&results)
 	return results

@@ -12,7 +12,7 @@ type User_role struct {
 
 func FindRoleByUserId(userId interface{}) User_role {
 	var uRole User_role
-	DB.Where("user_id = ?", userId).First(&uRole)
+	OldDB.Where("user_id = ?", userId).First(&uRole)
 	return uRole
 }
 func CreateUserRole(userId uint, roleId uint) {
@@ -20,8 +20,8 @@ func CreateUserRole(userId uint, roleId uint) {
 		UserId: strconv.Itoa(int(userId)),
 		RoleId: roleId,
 	}
-	DB.Create(uRole)
+	OldDB.Create(uRole)
 }
 func DeleteRoleByUserId(userId interface{}) {
-	DB.Where("user_id = ?", userId).Delete(User_role{})
+	OldDB.Where("user_id = ?", userId).Delete(User_role{})
 }

@@ -16,13 +16,13 @@ type About struct {
 
 func FindAbouts() []About {
 	var a []About
-	DB.Select("id,title_cn,page").Find(&a)
+	OldDB.Select("id,title_cn,page").Find(&a)
 	return a
 }
 
 func FindAboutByPage(page interface{}) About {
 	var a About
-	DB.Where("page = ?", page).First(&a)
+	OldDB.Where("page = ?", page).First(&a)
 	return a
 }
 func FindAboutByPageLanguage(page interface{}, lang string) About {
@@ -31,9 +31,9 @@ func FindAboutByPageLanguage(page interface{}, lang string) About {
 		lang = "cn"
 	}
 	if lang == "en" {
-		DB.Select("css_js,title_en,keywords_en,desc_en,html_en").Where("page = ?", page).First(&a)
+		OldDB.Select("css_js,title_en,keywords_en,desc_en,html_en").Where("page = ?", page).First(&a)
 	} else {
-		DB.Select("css_js,title_cn,keywords_cn,desc_cn,html_cn").Where("page = ?", page).First(&a)
+		OldDB.Select("css_js,title_cn,keywords_cn,desc_cn,html_cn").Where("page = ?", page).First(&a)
 	}
 	return a
 }
@@ -49,6 +49,6 @@ func UpdateAbout(page string, title_cn string, title_en string, keywords_cn stri
 		HtmlCn:     html_cn,
 		HtmlEn:     html_en,
 	}
-	DB.Model(c).Where("page = ?", page).Update(c)
+	OldDB.Model(c).Where("page = ?", page).Update(c)
 	InitConfig()
 }

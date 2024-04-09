@@ -21,7 +21,7 @@ func CreateWelcome(userId string, content string) uint {
 		Ctime:   time.Now(),
 		Keyword: "welcome",
 	}
-	DB.Create(w)
+	OldDB.Create(w)
 	return w.ID
 }
 func UpdateWelcome(userId string, id string, content string) uint {
@@ -31,24 +31,24 @@ func UpdateWelcome(userId string, id string, content string) uint {
 	w := &Welcome{
 		Content: content,
 	}
-	DB.Model(w).Where("user_id = ? and id = ?", userId, id).Update(w)
+	OldDB.Model(w).Where("user_id = ? and id = ?", userId, id).Update(w)
 	return w.ID
 }
 func FindWelcomeByUserIdKey(userId interface{}, keyword interface{}) Welcome {
 	var w Welcome
-	DB.Where("user_id = ? and keyword=?", userId, keyword).First(&w)
+	OldDB.Where("user_id = ? and keyword=?", userId, keyword).First(&w)
 	return w
 }
 func FindWelcomesByUserId(userId interface{}) []Welcome {
 	var w []Welcome
-	DB.Where("user_id = ?", userId).Find(&w)
+	OldDB.Where("user_id = ?", userId).Find(&w)
 	return w
 }
 func FindWelcomesByKeyword(userId interface{}, keyword interface{}) []Welcome {
 	var w []Welcome
-	DB.Where("user_id = ? and keyword=?", userId, keyword).Find(&w)
+	OldDB.Where("user_id = ? and keyword=?", userId, keyword).Find(&w)
 	return w
 }
 func DeleteWelcome(userId interface{}, id string) {
-	DB.Where("user_id = ? and id = ?", userId, id).Delete(Welcome{})
+	OldDB.Where("user_id = ? and id = ?", userId, id).Delete(Welcome{})
 }

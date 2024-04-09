@@ -9,12 +9,12 @@ type Role struct {
 
 func FindRoles() []Role {
 	var roles []Role
-	DB.Order("id desc").Find(&roles)
+	OldDB.Order("id desc").Find(&roles)
 	return roles
 }
 func FindRole(id interface{}) Role {
 	var role Role
-	DB.Where("id = ?", id).First(&role)
+	OldDB.Where("id = ?", id).First(&role)
 	return role
 }
 func SaveRole(id string, name string, method string, path string) {
@@ -23,5 +23,5 @@ func SaveRole(id string, name string, method string, path string) {
 		Name:   name,
 		Path:   path,
 	}
-	DB.Model(role).Where("id=?", id).Update(role)
+	OldDB.Model(role).Where("id=?", id).Update(role)
 }

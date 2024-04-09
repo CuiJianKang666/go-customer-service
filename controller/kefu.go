@@ -263,11 +263,11 @@ func PostKefuInfo(c *gin.Context) {
 		message := &models.Message{
 			KefuId: name,
 		}
-		models.DB.Model(&models.Message{}).Update(message)
+		models.OldDB.Model(&models.Message{}).Update(message)
 		visitor := &models.Visitor{
 			ToId: name,
 		}
-		models.DB.Model(&models.Visitor{}).Update(visitor)
+		models.OldDB.Model(&models.Visitor{}).Update(visitor)
 	}
 
 	c.JSON(200, gin.H{

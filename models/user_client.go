@@ -15,11 +15,11 @@ func CreateUserClient(kefu, clientId string) uint {
 		Client_id:  clientId,
 		Created_at: time.Now().Format("2006-01-02 15:04:05"),
 	}
-	DB.Create(u)
+	OldDB.Create(u)
 	return u.ID
 }
 func FindClients(kefu string) []User_client {
 	var arr []User_client
-	DB.Where("kefu = ?", kefu).Find(&arr)
+	OldDB.Where("kefu = ?", kefu).Find(&arr)
 	return arr
 }

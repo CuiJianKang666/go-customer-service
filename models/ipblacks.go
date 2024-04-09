@@ -18,20 +18,20 @@ func CreateIpblack(ip string, kefuId string) uint {
 		KefuId:   kefuId,
 		CreateAt: time.Now(),
 	}
-	DB.Create(black)
+	OldDB.Create(black)
 	return black.ID
 }
 func DeleteIpblackByIp(ip string) {
-	DB.Where("ip = ?", ip).Delete(Ipblack{})
+	OldDB.Where("ip = ?", ip).Delete(Ipblack{})
 }
 func FindIp(ip string) Ipblack {
 	var ipblack Ipblack
-	DB.Where("ip = ?", ip).First(&ipblack)
+	OldDB.Where("ip = ?", ip).First(&ipblack)
 	return ipblack
 }
 func FindIpsByKefuId(id string) []Ipblack {
 	var ipblack []Ipblack
-	DB.Where("kefu_id = ?", id).Find(&ipblack)
+	OldDB.Where("kefu_id = ?", id).Find(&ipblack)
 	return ipblack
 }
 func FindIps(query interface{}, args []interface{}, page uint, pagesize uint) []Ipblack {
@@ -41,9 +41,9 @@ func FindIps(query interface{}, args []interface{}, page uint, pagesize uint) []
 	}
 	var ipblacks []Ipblack
 	if query != nil {
-		DB.Where(query, args...).Offset(offset).Limit(pagesize).Find(&ipblacks)
+		OldDB.Where(query, args...).Offset(offset).Limit(pagesize).Find(&ipblacks)
 	} else {
-		DB.Offset(offset).Limit(pagesize).Find(&ipblacks)
+		OldDB.Offset(offset).Limit(pagesize).Find(&ipblacks)
 	}
 	return ipblacks
 }
@@ -52,16 +52,16 @@ func FindIps(query interface{}, args []interface{}, page uint, pagesize uint) []
 func CountIps(query interface{}, args []interface{}) uint {
 	var count uint
 	if query != nil {
-		DB.Model(&Visitor{}).Where(query, args...).Count(&count)
+		OldDB.Model(&Visitor{}).Where(query, args...).Count(&count)
 	} else {
-		DB.Model(&Visitor{}).Count(&count)
+		OldDB.Model(&Visitor{}).Count(&count)
 	}
 	return count
 }
 
 func GetIpblack(ip string, kefuId string) (Ipblack, error) {
 	var ipline Ipblack
-	err := DB.Where(&Ipblack{IP: ip, KefuId: kefuId}).Find(&ipline).Error
+	err := OldDB.Where(&Ipblack{IP: ip, KefuId: kefuId}).Find(&ipline).Error
 	if err != nil {
 		logrus.Error(err.Error())
 	}
