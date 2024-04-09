@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/taoshihan1991/imaptool/common"
+	gorm2 "gorm.io/gorm"
 	"log"
 	"time"
 )
 
 var DB *gorm.DB
+var newDB *gorm2.DB
 
 type Model struct {
 	ID        uint       `gorm:"primary_key" json:"id"`

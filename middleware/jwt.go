@@ -3,7 +3,6 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/taoshihan1991/imaptool/tools"
-	"log"
 	"time"
 )
 
@@ -40,7 +39,6 @@ func JwtApiMiddleware(c *gin.Context) {
 		})
 		c.Abort()
 	}
-	log.Println(userinfo)
 	c.Set("user", userinfo["name"])
 	c.Set("kefu_id", userinfo["kefu_id"])
 	c.Set("kefu_name", userinfo["name"])

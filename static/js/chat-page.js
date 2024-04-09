@@ -282,7 +282,8 @@ new Vue({
             if (navigator.cookieEnabled && typeof window.localStorage !== 'undefined') {
                 localStorage.setItem(key, JSON.stringify(obj));
             }
-        }, getCache: function (key) {
+        },
+        getCache: function (key) {
             if (navigator.cookieEnabled && typeof window.localStorage !== 'undefined') {
                 return JSON.parse(localStorage.getItem(key));
             }

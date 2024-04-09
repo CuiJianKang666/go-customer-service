@@ -86,21 +86,21 @@ func UpdateVisitorKefu(visitorId string, kefuId string) {
 	DB.Model(&visitor).Where("visitor_id = ?", visitorId).Update("to_id", kefuId)
 }
 
-//查询条数
+// 查询条数
 func CountVisitors() uint {
 	var count uint
 	DB.Model(&Visitor{}).Count(&count)
 	return count
 }
 
-//查询条数
+// 查询条数
 func CountVisitorsByKefuId(kefuId string) uint {
 	var count uint
 	DB.Model(&Visitor{}).Where("to_id=?", kefuId).Count(&count)
 	return count
 }
 
-//查询每天条数
+// 查询每天条数
 type EveryDayNum struct {
 	Day string `json:"day"`
 	Num int64  `json:"num"`
