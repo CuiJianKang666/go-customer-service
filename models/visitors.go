@@ -108,8 +108,15 @@ type EveryDayNum struct {
 
 func CountVisitorsEveryDay(toId string) []EveryDayNum {
 	var results []EveryDayNum
-	OldDB.Raw("select DATE_FORMAT(created_at,'%y-%m-%d') as day ,"+
-		"count(*) as num from visitor where to_id=? group by day order by day desc limit 30",
+	OldDB.Raw("select DATE_FORMAT(updated_at,'%y-%m-%d') as day ,"+
+		"count(*) as num from visitor where to_id=? group by day order by day desc limit 7",
 		toId).Scan(&results)
+	return results
+}
+
+func CountRootVisitorsEveryDay() []EveryDayNum {
+	var results []EveryDayNum
+	OldDB.Raw("select DATE_FORMAT(updated_at,'%y-%m-%d') as day ," +
+		"count(*) as num from visitor group by day order by day desc limit 7").Scan(&results)
 	return results
 }

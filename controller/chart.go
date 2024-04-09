@@ -11,14 +11,20 @@ func GetChartStatistic(c *gin.Context) {
 	kefuName, _ := c.Get("kefu_name")
 
 	dayNumMap := make(map[string]string)
-	result := models.CountVisitorsEveryDay(kefuName.(string))
+	var result []models.EveryDayNum
+	if kefuName == "root" {
+		result = models.CountRootVisitorsEveryDay()
+	} else {
+		result = models.CountVisitorsEveryDay(kefuName.(string))
+	}
+
 	for _, item := range result {
 		dayNumMap[item.Day] = tools.Int2Str(item.Num)
 	}
 
 	nowTime := time.Now()
 	list := make([]map[string]string, 0)
-	for i := 0; i > -46; i-- {
+	for i := 0; i > -7; i-- {
 		getTime := nowTime.AddDate(0, 0, i)   //年，月，日   获取一天前的时间
 		resTime := getTime.Format("06-01-02") //获取的时间的格式
 		tmp := make(map[string]string)
