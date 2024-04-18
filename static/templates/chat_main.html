@@ -3,7 +3,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>GO语言开源客服系统-GOFLY</title>
+    <title>应急智能客服系统</title>
     <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.1/theme-chalk/index.min.css">
     <script src="https://cdn.staticfile.org/vue/2.6.9/vue.min.js"></script>
     <script src="https://cdn.staticfile.org/element-ui/2.15.1/index.js"></script>
@@ -27,7 +27,7 @@
 
         .chatBoxMe .el-col-3{float: right;text-align: right;}
         .chatBoxMe .chatUser{text-align: right}
-        .chatBox{width: 100%;height:calc(100% - 170px);;overflow-y: auto;overflow-x: hidden;}
+        .chatBox{width: 100%;height:calc(100% - 220px);;overflow-y: auto;overflow-x: hidden;}
         .chatTime{text-align: center;color: #bbb;margin: 5px 0;font-size: 12px;}
     </style>
 </head>
@@ -86,7 +86,8 @@
                                 :title="chatTitle+chatInputing"
                                 >
                         </el-alert>
-                        <div class="kefuFuncBtns" v-if="visitor.visitor_id" style="display: none">
+                        <div class="kefuFuncBtns" v-if="visitor.visitor_id">
+<!--                        <div class="kefuFuncBtns" v-if="visitor.visitor_id" style="display: none">-->
                             <el-button v-on:click="getMesssagesByVisitorId(visitor.visitor_id,true)" size="small" type="success" plain icon="el-icon-user">加载全部</el-button>
                             <el-button v-on:click="transKefu" size="small" type="success" plain icon="el-icon-position">转接</el-button>
                             <el-button v-on:click="closeVisitor(visitor.visitor_id)" size="small" type="success" plain icon="el-icon-close">结束</el-button>
@@ -132,7 +133,6 @@
                             <el-button class="kefuSendBtn" :disabled="sendDisabled" size="mini" type="primary" v-on:click="chatToUser">发送</el-button>
                             <el-input type="textarea" :autosize="{ minRows: 8, maxRows: 12}" class="chatArea" v-model="messageContent"  v-on:keyup.enter.native="chatToUser"  placeholder="请输入内容"></el-input>
                         </div>
-
                     </div>
                 </el-col>
                 <el-col :span="6" class="chatRight">
@@ -273,7 +273,7 @@
             </el-table>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="transKefuDialog = false">取 消</el-button>
-              </span>
+            </span>
         </el-dialog>
         <!--//转接-->
         <!--回复分组-->

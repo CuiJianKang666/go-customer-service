@@ -50,6 +50,7 @@ func SendNoticeEmail(username, msg string) {
 	if smtp == "" || email == "" || password == "" {
 		return
 	}
+	//下面的to email数组是接收方邮箱
 	err := tools.SendSmtp(smtp, email, password, []string{email}, "[通知]"+username, msg)
 	if err != nil {
 		log.Println(err)

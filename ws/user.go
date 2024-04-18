@@ -54,7 +54,9 @@ func NewKefuServer(c *gin.Context) {
 		}
 	}
 }
+
 func AddKefuToList(kefu *User) {
+	//关闭旧连接
 	oldUser, ok := KefuList[kefu.Id]
 	if oldUser != nil || ok {
 		msg := TypeMessage{
@@ -82,6 +84,7 @@ func OneKefuMessage(toId string, str []byte) {
 	}
 }
 
+// 客服
 func KefuMessage(visitorId, content string, kefuInfo models.User) {
 	msg := TypeMessage{
 		Type: "message",

@@ -298,10 +298,10 @@ func GetKefusVisitorOnlines(c *gin.Context) {
 		}
 	}
 
-	tcps := make([]string, 0)
-	for ip, _ := range clientTcpList {
-		tcps = append(tcps, ip)
-	}
+	//tcps := make([]string, 0)
+	//for ip, _ := range clientTcpList {
+	//	tcps = append(tcps, ip)
+	//}
 	c.JSON(200, gin.H{
 		"code":   200,
 		"msg":    "ok",

@@ -10,7 +10,6 @@ import (
 )
 
 func PostKefuAvator(c *gin.Context) {
-
 	avator := c.PostForm("avator")
 	if avator == "" {
 		c.JSON(200, gin.H{
@@ -57,6 +56,7 @@ func PostKefuPass(c *gin.Context) {
 		"result": "",
 	})
 }
+
 func PostKefuClient(c *gin.Context) {
 	kefuName, _ := c.Get("kefu_name")
 	clientId := c.PostForm("client_id")
@@ -75,6 +75,7 @@ func PostKefuClient(c *gin.Context) {
 		"result": "",
 	})
 }
+
 func GetKefuInfo(c *gin.Context) {
 	kefuId, _ := c.Get("kefu_id")
 	user := models.FindUserById(kefuId)
@@ -91,6 +92,7 @@ func GetKefuInfo(c *gin.Context) {
 		"result": info,
 	})
 }
+
 func GetKefuInfoAll(c *gin.Context) {
 	id, _ := c.Get("kefu_id")
 	userinfo := models.FindUserRole("user.avator,user.name,user.id, role.name role_name", id)
@@ -100,6 +102,7 @@ func GetKefuInfoAll(c *gin.Context) {
 		"result": userinfo,
 	})
 }
+
 func GetOtherKefuList(c *gin.Context) {
 	idStr, _ := c.Get("kefu_id")
 	id := idStr.(float64)
@@ -128,6 +131,7 @@ func GetOtherKefuList(c *gin.Context) {
 		"result": result,
 	})
 }
+
 func PostTransKefu(c *gin.Context) {
 	kefuId := c.Query("kefu_id")
 	visitorId := c.Query("visitor_id")
@@ -143,14 +147,18 @@ func PostTransKefu(c *gin.Context) {
 	}
 	models.UpdateVisitorKefu(visitorId, kefuId)
 	ws.UpdateVisitorUser(visitorId, kefuId)
+	//告诉转接后的客服，访问者上线
 	go ws.VisitorOnline(kefuId, visitor)
+	//告诉现在的客服
 	go ws.VisitorOffline(curKefuId.(string), visitor.VisitorId, visitor.Name)
+	//告诉访问者
 	go ws.VisitorNotice(visitor.VisitorId, "客服转接到"+user.Nickname)
 	c.JSON(200, gin.H{
 		"code": 200,
 		"msg":  "转移成功",
 	})
 }
+
 func GetKefuInfoSetting(c *gin.Context) {
 	kefuId := c.Query("kefu_id")
 	user := models.FindUserById(kefuId)

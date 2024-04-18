@@ -142,6 +142,8 @@ func VisitorNotice(visitorId string, notice string) {
 	}
 	visitor.Conn.WriteMessage(websocket.TextMessage, str)
 }
+
+// 发送给访问者的message
 func VisitorMessage(visitorId, content string, kefuInfo models.User) {
 	msg := TypeMessage{
 		Type: "message",
@@ -162,13 +164,17 @@ func VisitorMessage(visitorId, content string, kefuInfo models.User) {
 	}
 	visitor.Conn.WriteMessage(websocket.TextMessage, str)
 }
+
 func VisitorAutoReply(vistorInfo models.Visitor, kefuInfo models.User, content string) {
 	kefu, ok := KefuList[kefuInfo.Name]
 	reply := models.FindReplyItemByUserIdTitle(kefuInfo.Name, content)
 	if reply.Content != "" {
 		time.Sleep(1 * time.Second)
+		//发送给访问者问题的结果
 		VisitorMessage(vistorInfo.VisitorId, reply.Content, kefuInfo)
+		//发送自动回复消息（客服端展示）
 		KefuMessage(vistorInfo.VisitorId, reply.Content, kefuInfo)
+		//创建记录
 		models.CreateMessage(kefuInfo.Name, vistorInfo.VisitorId, reply.Content, "kefu")
 	}
 	if !ok || kefu == nil {
@@ -181,6 +187,7 @@ func VisitorAutoReply(vistorInfo models.Visitor, kefuInfo models.User, content s
 		models.CreateMessage(kefuInfo.Name, vistorInfo.VisitorId, welcome, "kefu")
 	}
 }
+
 func CleanVisitorExpire() {
 	go func() {
 		log.Println("cleanVisitorExpire start...")

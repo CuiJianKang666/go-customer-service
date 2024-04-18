@@ -60,41 +60,22 @@ func SendMessageV2(c *gin.Context) {
 		guest, ok := ws.ClientList[vistorInfo.VisitorId]
 
 		if guest != nil && ok {
+			//客服发消息给访问者
 			ws.VisitorMessage(vistorInfo.VisitorId, content, kefuInfo)
 		}
+		//主要作用是为了客服端页面展示
 		ws.KefuMessage(vistorInfo.VisitorId, content, kefuInfo)
-		//msg = TypeMessage{
-		//	Type: "message",
-		//	Data: ws.ClientMessage{
-		//		Name:    kefuInfo.Nickname,
-		//		Avator:  kefuInfo.Avator,
-		//		Id:      vistorInfo.VisitorId,
-		//		Time:    time.Now().Format("2006-01-02 15:04:05"),
-		//		ToId:    vistorInfo.VisitorId,
-		//		Content: content,
-		//		IsKefu:  "yes",
-		//	},
-		//}
-		//str2, _ := json.Marshal(msg)
-		//ws.OneKefuMessage(kefuInfo.Name, str2)
 		c.JSON(200, gin.H{
 			"code": 200,
 			"msg":  "ok",
 		})
 	}
 	if cType == "visitor" {
+		//访客发消息给客服
 		guest, ok := ws.ClientList[vistorInfo.VisitorId]
 		if ok && guest != nil {
 			guest.UpdateTime = time.Now()
 		}
-		//kefuConns, ok := ws.KefuList[kefuInfo.Name]
-		//if kefuConns == nil || !ok {
-		//	c.JSON(200, gin.H{
-		//		"code": 200,
-		//		"msg":  "ok",
-		//	})
-		//	return
-		//}
 		msg := ws.TypeMessage{
 			Type: "message",
 			Data: ws.ClientMessage{
@@ -108,20 +89,22 @@ func SendMessageV2(c *gin.Context) {
 			},
 		}
 		str, _ := json.Marshal(msg)
+		//发送消息给客服
 		ws.OneKefuMessage(kefuInfo.Name, str)
-		//ws.KefuMessage(vistorInfo.VisitorId, content, kefuInfo)
 		kefu, ok := ws.KefuList[kefuInfo.Name]
 		if !ok || kefu == nil {
+			//客服不在线时，发送提醒邮件
 			go SendNoticeEmail(content+"|"+vistorInfo.Name, content)
 		}
+		//客服自动回复访问者
 		go ws.VisitorAutoReply(vistorInfo, kefuInfo, content)
 		c.JSON(200, gin.H{
 			"code": 200,
 			"msg":  "ok",
 		})
 	}
-
 }
+
 func SendVisitorNotice(c *gin.Context) {
 	notice := c.Query("msg")
 	if notice == "" {
@@ -250,36 +233,12 @@ func UploadFile(c *gin.Context) {
 	}
 }
 func GetMessagesV2(c *gin.Context) {
-	visitorId := c.Query("visitor_id")
-	messages := models.FindMessageByVisitorId(visitorId)
-	//result := make([]map[string]interface{}, 0)
-	chatMessages := make([]ChatMessage, 0)
-	var visitor models.Visitor
-	var kefu models.User
-	for _, message := range messages {
-		//item := make(map[string]interface{})
-		if visitor.Name == "" || kefu.Name == "" {
-			kefu = models.FindUser(message.KefuId)
-			visitor = models.FindVisitorByVistorId(message.VisitorId)
-		}
-		var chatMessage ChatMessage
-		chatMessage.Time = message.CreatedAt.Format("2006-01-02 15:04:05")
-		chatMessage.Content = message.Content
-		chatMessage.MesType = message.MesType
-		if message.MesType == "kefu" {
-			chatMessage.Name = kefu.Nickname
-			chatMessage.Avator = kefu.Avator
-		} else {
-			chatMessage.Name = visitor.Name
-			chatMessage.Avator = visitor.Avator
-		}
-		chatMessages = append(chatMessages, chatMessage)
-	}
-	models.ReadMessageByVisitorId(visitorId)
+	visitorId := c.Query("visitorId")
+	messages := models.FindAllKefuMessageByVisitorId("message.visitor_id = ?", visitorId)
 	c.JSON(200, gin.H{
 		"code":   200,
 		"msg":    "ok",
-		"result": chatMessages,
+		"result": messages,
 	})
 }
 func GetMessagespages(c *gin.Context) {

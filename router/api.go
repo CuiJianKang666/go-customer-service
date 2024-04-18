@@ -44,13 +44,13 @@ func InitApiRouter(engine *gin.Engine) {
 	//engine.POST("/message_status", controller.GetVisitorMessage)
 
 	//获取客服信息
-	engine.POST("/kefuinfo_client", middleware.JwtApiMiddleware, controller.PostKefuClient)
+	engine.POST("/kefuinfo_client", middleware.JwtApiMiddleware, controller.PostKefuClient) //没用
 	engine.GET("/kefuinfo", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.GetKefuInfo)
 	engine.GET("/kefuinfo_setting", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.GetKefuInfoSetting)
 	engine.POST("/kefuinfo", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.PostKefuInfo)
 	engine.DELETE("/kefuinfo", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.DeleteKefuInfo)
 	engine.GET("/kefulist", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.GetKefuList)
-	engine.GET("/other_kefulist", middleware.JwtApiMiddleware, controller.GetOtherKefuList)
+	engine.GET("/other_kefulist", middleware.JwtApiMiddleware, controller.GetOtherKefuList) //没用
 	engine.GET("/trans_kefu", middleware.JwtApiMiddleware, controller.PostTransKefu)
 	engine.POST("/modifypass", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.PostKefuPass)
 	engine.POST("/modifyavator", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.PostKefuAvator)

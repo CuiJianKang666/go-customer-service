@@ -111,7 +111,6 @@ var app=new Vue({
                             window.location.href="/login";
                         }
                     });
-
                     break;
                 case "inputing":
                     this.handleInputing(redata.data);
@@ -123,7 +122,6 @@ var app=new Vue({
                     break;
                 case "userOnline":
                     this.addOnlineUser(redata.data);
-
                     break;
                 case "userOffline":
                     this.removeOfflineUser(redata.data);
@@ -345,7 +343,7 @@ var app=new Vue({
                 }
             });
         },
-        //获取客服信息
+        //获取在线用户列表
         getOnlineVisitors(){
             let _this=this;
             $.ajax({
@@ -414,14 +412,16 @@ var app=new Vue({
             let _this=this;
             $.ajax({
                 type:"get",
-                url:"/messages?visitorId="+visitorId,
+                url:"/2/messages?visitorId="+visitorId,
                 headers:{
                     "token":localStorage.getItem("token")
                 },
                 success: function(data) {
                     if(data.code==200 && data.result!=null){
+                        _this.showLoadMore=false;
                         let msgList=data.result;
                         _this.msgList=[];
+                        //只展示10条数据
                         if(!isAll&&msgList.length>10){
                             var i=msgList.length-10
                         }else{
@@ -440,8 +440,8 @@ var app=new Vue({
                                 content.name = visitorMes["visitor_name"];
                             }
                             content.content = replaceContent(visitorMes["content"]);
-                            content.time = visitorMes["time"];
-                            _this.msgList.push(content);
+                            content.time = visitorMes["create_time"];
+                            _this.msgList.unshift(content);
                             _this.scrollBottom();
                         }
                     }

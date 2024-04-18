@@ -94,7 +94,7 @@ func FindReplyBySearcch(userId interface{}, search string) []*ReplyGroup {
 	for _, replyItem := range replyItems {
 		temp[replyItem.GroupId].Items = append(temp[replyItem.GroupId].Items, replyItem)
 	}
-	var newReplyGroups []*ReplyGroup = make([]*ReplyGroup, 0)
+	var newReplyGroups = make([]*ReplyGroup, 0)
 	for _, replyGroup := range replyGroups {
 		if len(replyGroup.Items) != 0 {
 			newReplyGroups = append(newReplyGroups, replyGroup)

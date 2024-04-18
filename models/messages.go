@@ -119,3 +119,13 @@ func FindMessageByPage(page uint, pagesize uint, query interface{}, args ...inte
 	}
 	return messages
 }
+
+// 查询客服端消息
+func FindAllKefuMessageByVisitorId(query interface{}, args ...interface{}) []*MessageKefu {
+	var messages []*MessageKefu
+	OldDB.Table("message").Select("message.*,visitor.avator visitor_avator,visitor.name visitor_name,user.avator kefu_avator,user.nickname kefu_name").Joins("left join user on message.kefu_id=user.name").Joins("left join visitor on visitor.visitor_id=message.visitor_id").Where(query, args...).Order("message.id desc").Find(&messages)
+	for _, mes := range messages {
+		mes.CreateTime = mes.CreatedAt.Format("2006-01-02 15:04:05")
+	}
+	return messages
+}
