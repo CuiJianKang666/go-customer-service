@@ -249,7 +249,7 @@
         </audio>
         <!--转接-->
         <el-dialog
-                title="转移客服"
+                title="转接客服"
                 :visible.sync="transKefuDialog"
                 width="30%"
                 top="0"
@@ -267,7 +267,7 @@
                     <template slot-scope="scope">
                         <el-tag v-show="scope.row.status=='offline'"
                                 disable-transitions>离线</el-tag>
-                        <el-button v-show="scope.row.status=='online'" type="primary" @click="transKefuVisitor(scope.row.name,visitor.visitor_id)">转移</el-button>
+                        <el-button v-show="scope.row.status=='online'" type="primary" @click="transKefuVisitor(scope.row.name,visitor.visitor_id)">转接</el-button>
                     </template>
                 </el-table-column>
             </el-table>
