@@ -81,7 +81,7 @@ func run() {
 	ioutil.WriteFile("gofly.sock", []byte(fmt.Sprintf("%d,%d", os.Getppid(), os.Getpid())), 0666)
 	//限流类
 	tools.NewLimitQueue()
-	//清理
+	//每5s清理一次过期的visitor
 	ws.CleanVisitorExpire()
 	//后端websocket
 	go ws.WsServerBackend()

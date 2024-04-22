@@ -194,6 +194,7 @@ func CleanVisitorExpire() {
 		for {
 			for _, user := range ClientList {
 				diff := time.Now().Sub(user.UpdateTime).Seconds()
+				//过期时间为10分钟
 				if diff >= common.VisitorExpire {
 					msg := TypeMessage{
 						Type: "auto_close",

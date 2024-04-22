@@ -52,6 +52,8 @@ type ClientMessage struct {
 
 var ClientList = make(map[string]*User)
 var KefuList = make(map[string]*User)
+
+// 所有的消息都通过这个message传递
 var message = make(chan *Message, 10)
 var upgrader = websocket.Upgrader{}
 var Mux sync.RWMutex
@@ -82,6 +84,7 @@ func SendServerJiang(title string, content string, domain string) string {
 	res := tools.Get(url)
 	return res
 }
+
 func SendFlyServerJiang(title string, content string, domain string) string {
 	return ""
 }
@@ -105,7 +108,7 @@ func UpdateVisitorStatusCron() {
 	}
 }
 
-// 后端广播发送消息
+// 后端发送消息
 func WsServerBackend() {
 	for {
 		message := <-message
