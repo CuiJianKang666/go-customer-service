@@ -76,6 +76,7 @@ func SendMessageV2(c *gin.Context) {
 		if ok && guest != nil {
 			guest.UpdateTime = time.Now()
 		}
+		//发送给客服的消息
 		msg := ws.TypeMessage{
 			Type: "message",
 			Data: ws.ClientMessage{

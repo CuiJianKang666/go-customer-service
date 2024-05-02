@@ -13,7 +13,6 @@ var rootCmd = &cobra.Command{
 	Long:  `简洁快速的GO语言WEB在线客服 https://gofly.sopans.com`,
 	Args:  args,
 	Run: func(cmd *cobra.Command, args []string) {
-
 	},
 }
 

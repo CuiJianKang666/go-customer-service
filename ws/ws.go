@@ -35,6 +35,8 @@ type TypeMessage struct {
 	Type interface{} `json:"type"`
 	Data interface{} `json:"data"`
 }
+
+// 发送到客户端的消息
 type ClientMessage struct {
 	Name      string `json:"name"`
 	Avator    string `json:"avator"`

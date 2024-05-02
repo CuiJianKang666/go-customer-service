@@ -145,6 +145,7 @@ func VisitorNotice(visitorId string, notice string) {
 
 // 发送给访问者的message
 func VisitorMessage(visitorId, content string, kefuInfo models.User) {
+	//发送给访客的消息
 	msg := TypeMessage{
 		Type: "message",
 		Data: ClientMessage{

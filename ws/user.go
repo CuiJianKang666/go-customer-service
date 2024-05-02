@@ -84,7 +84,7 @@ func OneKefuMessage(toId string, str []byte) {
 	}
 }
 
-// 客服
+// 发送消息到客服的websocket
 func KefuMessage(visitorId, content string, kefuInfo models.User) {
 	msg := TypeMessage{
 		Type: "message",
