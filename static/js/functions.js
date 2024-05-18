@@ -247,6 +247,7 @@ function utf8ToB64(str) {
     return window.btoa(unescape(encodeURIComponent(str)));
 }
 function b64ToUtf8(str) {
+    console.log(str)
     return decodeURIComponent(escape(window.atob(str)));
 }
 //播放声音

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/taoshihan1991/imaptool/models"
 	"github.com/taoshihan1991/imaptool/tools"
@@ -17,6 +18,7 @@ func GetChartStatistic(c *gin.Context) {
 	} else {
 		result = models.CountVisitorsEveryDay(kefuName.(string))
 	}
+	fmt.Println(result)
 
 	for _, item := range result {
 		dayNumMap[item.Day] = tools.Int2Str(item.Num)
@@ -29,7 +31,12 @@ func GetChartStatistic(c *gin.Context) {
 		resTime := getTime.Format("06-01-02") //获取的时间的格式
 		tmp := make(map[string]string)
 		tmp["day"] = resTime
-		tmp["num"] = dayNumMap[resTime]
+		if dayNumMap[resTime] == "" {
+			tmp["num"] = "0"
+		} else {
+			tmp["num"] = dayNumMap[resTime]
+		}
+		fmt.Println(tmp)
 		list = append(list, tmp)
 	}
 

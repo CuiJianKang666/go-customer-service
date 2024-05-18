@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/taoshihan1991/imaptool/common"
 	"github.com/taoshihan1991/imaptool/models"
@@ -101,8 +102,7 @@ func PostVisitorLogin(c *gin.Context) {
 			}
 		}
 	}
-	//log.Println(name,avator,c.ClientIP(),toId,id,refer,city,client_ip)
-	if name == "" || avator == "" || toId == "" || id == "" || refer == "" || city == "" || client_ip == "" {
+	if name == "" || avator == "" || toId == "" || id == "" || city == "" || client_ip == "" {
 		c.JSON(200, gin.H{
 			"code": 400,
 			"msg":  "error",
@@ -121,7 +121,7 @@ func PostVisitorLogin(c *gin.Context) {
 	if visitor.Name != "" {
 		avator = visitor.Avator
 		//更新状态上线
-		models.UpdateVisitor(name, avator, id, 1, c.ClientIP(), c.ClientIP(), refer, extra)
+		models.UpdateVisitor(name, avator, id, 1, c.ClientIP(), c.ClientIP(), refer, extra, toId)
 	} else {
 		models.CreateVisitor(name, avator, c.ClientIP(), toId, id, refer, city, client_ip, extra)
 	}
@@ -168,6 +168,8 @@ func GetVisitor(c *gin.Context) {
 // @Failure 200 {object} controller.Response
 // @Router /visitors [get]
 func GetVisitors(c *gin.Context) {
+	fmt.Println("==================================")
+	fmt.Println(c.Get("kefu_name"))
 	page, _ := strconv.Atoi(c.Query("page"))
 	pagesize, _ := strconv.Atoi(c.Query("pagesize"))
 	if pagesize == 0 {

@@ -57,6 +57,8 @@ func InitApiRouter(engine *gin.Engine) {
 	//角色列表
 	engine.GET("/roles", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.GetRoleList)
 	engine.POST("/role", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.PostRole)
+	engine.POST("/add_role", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.CreateRole)
+	engine.GET("/delete_role", middleware.JwtApiMiddleware, middleware.RbacAuth, controller.DeleteRole)
 
 	engine.GET("/visitors_online", controller.GetVisitorOnlines)
 	engine.GET("/visitors_kefu_online", middleware.JwtApiMiddleware, controller.GetKefusVisitorOnlines)

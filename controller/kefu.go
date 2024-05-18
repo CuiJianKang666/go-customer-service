@@ -1,12 +1,14 @@
 package controller
 
 import (
+	"fmt"
 	"github.com/dchest/captcha"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/taoshihan1991/imaptool/models"
 	"github.com/taoshihan1991/imaptool/tools"
 	"github.com/taoshihan1991/imaptool/ws"
+	"strconv"
 )
 
 func PostKefuAvator(c *gin.Context) {
@@ -245,6 +247,7 @@ func PostKefuInfo(c *gin.Context) {
 	password := c.PostForm("password")
 	avator := c.PostForm("avator")
 	nickname := c.PostForm("nickname")
+	role_id := c.PostForm("role_id")
 	if name == "" {
 		c.JSON(200, gin.H{
 			"code": 400,
@@ -265,17 +268,29 @@ func PostKefuInfo(c *gin.Context) {
 		}
 	} else {
 		//更新用户
+		user := models.FindUserById(id)
 		if password != "" {
 			password = tools.Md5(password)
+		} else {
+			password = user.Password
 		}
 		message := &models.Message{
 			KefuId: name,
 		}
-		models.OldDB.Model(&models.Message{}).Update(message)
-		visitor := &models.Visitor{
-			ToId: name,
-		}
-		models.OldDB.Model(&models.Visitor{}).Update(visitor)
+
+		fmt.Println(user.Name)
+		fmt.Println(message)
+		//更新消息
+		models.OldDB.Model(&models.Message{}).Where("kefu_id", user.Name).Update(message)
+		//更新user
+		models.UpdateUser(id, name, password, avator, nickname)
+		//更新权限
+		uid, _ := strconv.Atoi(id)
+		urole_id, _ := strconv.Atoi(role_id)
+		models.UpdateRole(uid, urole_id)
+		//更新visitor
+		models.UpdateToKefuId(user.Name, name)
+		//err := models.OldDB.Model(&models.Visitor{}).Update(visitor)
 	}
 
 	c.JSON(200, gin.H{

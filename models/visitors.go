@@ -48,6 +48,9 @@ func FindVisitors(page uint, pagesize uint) []Visitor {
 	OldDB.Offset(offset).Limit(pagesize).Order("status desc, updated_at desc").Find(&visitors)
 	return visitors
 }
+func UpdateToKefuId(to_id string, target_id string) {
+	DB.Where(&Visitor{ToId: to_id}).Update("to_id", target_id)
+}
 func FindVisitorsByKefuId(page uint, pagesize uint, kefuId string) []Visitor {
 	offset := (page - 1) * pagesize
 	if offset <= 0 {
@@ -68,7 +71,7 @@ func UpdateVisitorStatus(visitorId string, status uint) {
 	visitor := Visitor{}
 	OldDB.Model(&visitor).Where("visitor_id = ?", visitorId).Update("status", status)
 }
-func UpdateVisitor(name, avator, visitorId string, status uint, clientIp string, sourceIp string, refer, extra string) {
+func UpdateVisitor(name, avator, visitorId string, status uint, clientIp string, sourceIp string, refer, extra string, toId string) {
 	visitor := &Visitor{
 		Status:   status,
 		ClientIp: clientIp,
@@ -77,6 +80,7 @@ func UpdateVisitor(name, avator, visitorId string, status uint, clientIp string,
 		Extra:    extra,
 		Name:     name,
 		Avator:   avator,
+		ToId:     toId,
 	}
 	visitor.UpdatedAt = time.Now()
 	OldDB.Model(visitor).Where("visitor_id = ?", visitorId).Update(visitor)

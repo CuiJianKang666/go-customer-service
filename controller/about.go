@@ -38,7 +38,7 @@ func PostAbout(c *gin.Context) {
 	if title_cn == "" || title_en == "" || html_cn == "" || html_en == "" {
 		c.JSON(200, gin.H{
 			"code": 400,
-			"msg":  "error",
+			"msg":  "请填写完整",
 		})
 		return
 	}

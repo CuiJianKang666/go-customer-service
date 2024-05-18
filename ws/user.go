@@ -2,6 +2,7 @@ package ws
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/taoshihan1991/imaptool/models"
@@ -59,6 +60,7 @@ func AddKefuToList(kefu *User) {
 	//关闭旧连接
 	oldUser, ok := KefuList[kefu.Id]
 	if oldUser != nil || ok {
+		fmt.Println("//关闭旧连接")
 		msg := TypeMessage{
 			Type: "close",
 			Data: kefu.Id,

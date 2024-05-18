@@ -4,6 +4,7 @@ import (
 	"fmt"
 	gorm2 "github.com/jinzhu/gorm"
 	"github.com/taoshihan1991/imaptool/common"
+	gormMysql "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
 	"time"
@@ -37,6 +38,13 @@ func Connect() error {
 	OldDB.DB().SetMaxIdleConns(10)
 	OldDB.DB().SetMaxOpenConns(100)
 	OldDB.DB().SetConnMaxLifetime(59 * time.Second)
+
+	DB, err = gorm.Open(gormMysql.Open(dsn))
+	if err != nil {
+		log.Println(err)
+		panic("数据库连接失败!")
+		return err
+	}
 	InitConfig()
 	return nil
 }

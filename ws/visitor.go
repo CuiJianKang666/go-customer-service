@@ -2,6 +2,7 @@ package ws
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	"github.com/taoshihan1991/imaptool/common"
@@ -38,6 +39,8 @@ func NewVisitorServer(c *gin.Context) {
 	//go SendServerJiang(vistorInfo.Name, "来了", c.Request.Host)
 
 	AddVisitorToList(user)
+	fmt.Println("新增visitor")
+	fmt.Println(user)
 
 	for {
 		//接受消息
@@ -67,6 +70,7 @@ func AddVisitorToList(user *User) {
 	//用户id对应的连接
 	oldUser, ok := ClientList[user.Id]
 	if oldUser != nil || ok {
+		fmt.Println("//用户id对应的连接")
 		msg := TypeMessage{
 			Type: "close",
 			Data: user.Id,
