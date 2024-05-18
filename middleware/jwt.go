@@ -6,16 +6,18 @@ import (
 	"time"
 )
 
-func JwtPageMiddleware(c *gin.Context) {
-	//暂时不处理
-	//token := c.Query("token")
-	//userinfo := tools.ParseToken(token)
-	//if userinfo == nil {
-	//	c.Redirect(302,"/login")
-	//	c.Abort()
-	//}
+var apiWhiteList = []string{
+	"/kefulist",
+	"/roles",
 }
+
 func JwtApiMiddleware(c *gin.Context) {
+	for _, api := range apiWhiteList {
+		if api == c.Request.URL.Path {
+			c.Next()
+			return
+		}
+	}
 	token := c.GetHeader("token")
 	if token == "" {
 		token = c.Query("token")
@@ -43,6 +45,4 @@ func JwtApiMiddleware(c *gin.Context) {
 	c.Set("kefu_id", userinfo["kefu_id"])
 	c.Set("kefu_name", userinfo["name"])
 	c.Set("role_id", userinfo["role_id"])
-	//if userinfo["type"]=="kefu"{
-	//}
 }

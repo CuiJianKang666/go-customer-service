@@ -8,6 +8,12 @@ import (
 )
 
 func RbacAuth(c *gin.Context) {
+	for _, api := range apiWhiteList {
+		if api == c.Request.URL.Path {
+			c.Next()
+			return
+		}
+	}
 	roleId, _ := c.Get("role_id")
 	role := models.FindRole(roleId)
 	var flag bool
