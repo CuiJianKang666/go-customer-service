@@ -80,6 +80,7 @@ func PostKefuClient(c *gin.Context) {
 
 func GetKefuInfo(c *gin.Context) {
 	kefuId, _ := c.Get("kefu_id")
+	fmt.Println(kefuId)
 	user := models.FindUserById(kefuId)
 	info := make(map[string]interface{})
 	info["name"] = user.Nickname
@@ -278,16 +279,16 @@ func PostKefuInfo(c *gin.Context) {
 			KefuId: name,
 		}
 
-		fmt.Println(user.Name)
-		fmt.Println(message)
 		//更新消息
 		models.OldDB.Model(&models.Message{}).Where("kefu_id", user.Name).Update(message)
 		//更新user
 		models.UpdateUser(id, name, password, avator, nickname)
 		//更新权限
-		uid, _ := strconv.Atoi(id)
-		urole_id, _ := strconv.Atoi(role_id)
-		models.UpdateRole(uid, urole_id)
+		if role_id != "0" {
+			uid, _ := strconv.Atoi(id)
+			urole_id, _ := strconv.Atoi(role_id)
+			models.UpdateRole(uid, urole_id)
+		}
 		//更新visitor
 		models.UpdateToKefuId(user.Name, name)
 		//err := models.OldDB.Model(&models.Visitor{}).Update(visitor)

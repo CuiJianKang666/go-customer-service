@@ -18,7 +18,6 @@ func GetChartStatistic(c *gin.Context) {
 	} else {
 		result = models.CountVisitorsEveryDay(kefuName.(string))
 	}
-	fmt.Println(result)
 
 	for _, item := range result {
 		dayNumMap[item.Day] = tools.Int2Str(item.Num)

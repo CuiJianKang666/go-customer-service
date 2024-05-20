@@ -164,7 +164,6 @@ func UploadImg(c *gin.Context) {
 		})
 		return
 	} else {
-
 		fileExt := strings.ToLower(path.Ext(f.Filename))
 		if fileExt != ".png" && fileExt != ".jpg" && fileExt != ".gif" && fileExt != ".jpeg" {
 			c.JSON(200, gin.H{

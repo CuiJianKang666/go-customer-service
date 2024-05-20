@@ -14,6 +14,16 @@ type ReplyGroup struct {
 	Items     []*ReplyItem `json:"items"`
 }
 
+type Reply_group struct {
+	Id        string `json:"id"`
+	GroupName string `json:"group_name"`
+	UserId    string `json:"user_id"`
+}
+
+func (Reply_group) TableName() string {
+	return "reply_group"
+}
+
 func FindReplyItemByUserIdTitle(userId interface{}, title string) ReplyItem {
 	var reply ReplyItem
 	OldDB.Where("user_id = ? and item_name = ?", userId, title).Find(&reply)
@@ -101,4 +111,14 @@ func FindReplyBySearcch(userId interface{}, search string) []*ReplyGroup {
 		}
 	}
 	return newReplyGroups
+}
+
+func GetReplyGroup(groupName string, kefuId string) Reply_group {
+	var replyGroup Reply_group
+	DB.Where(&Reply_group{}).Where(&Reply_group{GroupName: groupName, UserId: kefuId}).Find(&replyGroup)
+	return replyGroup
+}
+
+func UpdateReplyGroup(groupName string, kefuId string, newGroupName string) {
+	DB.Model(&Reply_group{}).Where(&Reply_group{GroupName: groupName, UserId: kefuId}).Update("group_name", newGroupName)
 }

@@ -7,7 +7,8 @@ import (
 )
 
 type ReplyForm struct {
-	GroupName string `form:"group_name" binding:"required"`
+	GroupName    string `form:"group_name" binding:"required"`
+	NewGroupName string `form:"new_group_name"`
 }
 type ReplyContentForm struct {
 	GroupId  string `form:"group_id" binding:"required"`
@@ -45,11 +46,28 @@ func PostReply(c *gin.Context) {
 		})
 		return
 	}
-	models.CreateReplyGroup(replyForm.GroupName, kefuId.(string))
-	c.JSON(200, gin.H{
-		"code": 200,
-		"msg":  "ok",
-	})
+	replyGroup := models.GetReplyGroup(replyForm.GroupName, kefuId.(string))
+	if replyGroup.GroupName != "" {
+		if replyForm.NewGroupName == "" {
+			//重复的组
+			c.JSON(200, gin.H{
+				"code": 400,
+				"msg":  "组名已存在",
+			})
+		}
+		models.UpdateReplyGroup(replyForm.GroupName, kefuId.(string), replyForm.NewGroupName)
+		c.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "修改成功",
+		})
+	} else {
+		models.CreateReplyGroup(replyForm.GroupName, kefuId.(string))
+		c.JSON(200, gin.H{
+			"code": 200,
+			"msg":  "添加成功",
+		})
+	}
+
 }
 func PostReplyContent(c *gin.Context) {
 	var replyContentForm ReplyContentForm
@@ -110,7 +128,7 @@ func PostReplySearch(c *gin.Context) {
 	if search == "" {
 		c.JSON(200, gin.H{
 			"code": 400,
-			"msg":  "参数错误",
+			"msg":  "搜索内容为空",
 		})
 		return
 	}
