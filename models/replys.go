@@ -1,5 +1,11 @@
 package models
 
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/go-resty/resty/v2"
+)
+
 type ReplyItem struct {
 	Id       string `json:"item_id"`
 	Content  string `json:"item_content"`
@@ -25,10 +31,46 @@ func (Reply_group) TableName() string {
 }
 
 func FindReplyItemByUserIdTitle(userId interface{}, title string) ReplyItem {
-	var reply ReplyItem
-	OldDB.Where("user_id = ? and item_name = ?", userId, title).Find(&reply)
-	return reply
+	var reply []ReplyItem
+	//OldDB.Where("user_id = ? and item_name = ?", userId, title).Find(&reply)
+	OldDB.Where("user_id = ?", userId).Find(&reply)
+	//使用大模型来做文本相似度对比
+	var itemArr []string
+	for _, item := range reply {
+		itemArr = append(itemArr, item.ItemName)
+	}
+	client := resty.New()
+	requestBody := map[string]interface{}{
+		"sentences1": []string{title},
+		"sentences2": itemArr,
+	}
+	// 发送 POST 请求
+	resp, err := client.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(requestBody).
+		Post("http://localhost:8010/text_similarity")
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ReplyItem{}
+	}
+
+	// 解析响应 JSON 数据
+	var result map[string]interface{}
+	err = json.Unmarshal(resp.Body(), &result)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return ReplyItem{}
+	}
+	maxScore := result["res"].(map[string]interface{})["max_score"].(string)
+	maxIndex := int(result["res"].(map[string]interface{})["max_index"].(float64))
+	if maxScore > "0.9" {
+		fmt.Println(reply[maxIndex])
+		return reply[maxIndex]
+	}
+	return ReplyItem{}
 }
+
 func FindReplyByUserId(userId interface{}) []*ReplyGroup {
 	var replyGroups []*ReplyGroup
 	//OldDB.Raw("select a.*,b.* from reply_group a left join reply_item b on a.id=b.group_id where a.user_id=? ", userId).Scan(&replyGroups)

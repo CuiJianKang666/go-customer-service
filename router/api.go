@@ -99,4 +99,5 @@ func InitApiRouter(engine *gin.Engine) {
 	}
 	//微信接口
 	engine.GET("/micro_program", middleware.JwtApiMiddleware, controller.GetCheckWeixinSign)
+	engine.GET("/test", controller.Test)
 }
