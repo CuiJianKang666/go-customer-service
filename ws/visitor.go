@@ -171,6 +171,9 @@ func VisitorMessage(visitorId, content string, kefuInfo models.User) {
 }
 
 func VisitorAutoReply(vistorInfo models.Visitor, kefuInfo models.User, content string) {
+	fmt.Print("------------")
+	fmt.Print(kefuInfo)
+
 	kefu, ok := KefuList[kefuInfo.Name]
 	reply := models.FindReplyItemByUserIdTitle(kefuInfo.Name, content)
 	if reply.Content != "" {
