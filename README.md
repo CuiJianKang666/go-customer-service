@@ -9,11 +9,10 @@
 
 ### 项目简介
 
-Golang语言开源客服系统，主要使用了gin + jwt-go + websocket + go.uuid + gorm + cobra + VueJS + ElementUI + MySQL等技术。
+主要使用了gin + jwt-go + websocket + go.uuid + gorm + cobra + VueJS + ElementUI + MySQL等技术。
 
 
 ### 安装使用
-
 
 * 先安装和运行mysql数据库 ，版本>=5.5 ，创建数据库
 
